@@ -1,17 +1,20 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from 'react'
+import { render } from 'react-dom'
+import 'fabric-webpack'
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+import DesignCanvas from './DesignCanvas'
+import Rect from './Rect'
+import Circle from './Circle'
+import Image from './Image'
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+const App = () => (
+  <div>
+    <DesignCanvas>
+      <Rect width={100} height={100} fill="blue" />
+      <Circle radius={20} top={200} />
+      <Image url="https://http.cat/100" scale={0.2} top={100} />
+    </DesignCanvas>
+  </div>
+) 
+
+render(<App />, document.getElementById('root'))
