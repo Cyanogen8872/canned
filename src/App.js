@@ -1,25 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import { render } from 'react-dom'
+import 'fabric-webpack'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import ParallaxScrolling from './page/ParallaxScrolling'
+import { AnimatePresence, motion } from "framer-motion"
+import { Switch, Route, NavLink, useLocation, Link } from "react-router-dom";
+
+const App = () => {
+  const location = useLocation()
+  return (<div>
+    <main
+      className="col-6 col-sm-8 col-md-10 py-5"
+      style={{ overflowX: "hidden", position: "relative" }}
+    >
+      <AnimatePresence>
+        <Switch location={location} key={location.pathname}>
+          <Route path="/" component={ParallaxScrolling} />
+        </Switch>
+      </AnimatePresence>
+    </main>
+  </div>)
 }
 
 export default App;

@@ -4,6 +4,10 @@ import PropTypes from 'prop-types'
 const fabric = window.fabric
 
 class DesignCanvas extends React.Component {
+  setData = (imageData) => {
+    this.props.setImageData.setImageData(imageData);
+  }
+
   static propTypes = {
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
@@ -29,16 +33,19 @@ class DesignCanvas extends React.Component {
         canvas: this.state.canvas,
       })
     })
+
     const { width, height } = this.props
     return (
-      <Fragment>
-        <canvas ref={c => (this.c = c)} width={width} height={height} />
-        {this.state.canvas && children}
-        <button onClick={e => {
-          e.preventDefault()
-          console.log(this.state.canvas.toJSON())
-        }}>To JSON</button>
-      </Fragment>
+      <div>
+        <Fragment>
+          <canvas ref={c => (this.c = c)} width={width} height={height} />
+          {this.state.canvas && children}
+          <button onClick={e => {
+            e.preventDefault()
+            this.setData(this.state.canvas.toJSON());
+          }}>To JSON</button>
+        </Fragment>
+      </div>
     )
   }
 }
