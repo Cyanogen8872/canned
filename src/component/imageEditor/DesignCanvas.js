@@ -28,11 +28,14 @@ class DesignCanvas extends React.Component {
   }
 
   render() {
+    console.log(this.props.allChildren)
     const children = React.Children.map(this.props.children, child => {
       return React.cloneElement(child, {
         canvas: this.state.canvas,
       })
     })
+
+    console.log(children)
 
     const { width, height } = this.props
     return (
