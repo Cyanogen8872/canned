@@ -8,6 +8,7 @@
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
     "@material-ui/core": "^5.0.0-beta.5",
+    "@mui/material": "^5.8.3",
     "fabric-webpack": "1.6.0-rc.1",
     "framer-motion": "^6.3.10",
     "lodash.omit": "4.5.0",
@@ -16,7 +17,8 @@
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-router-dom": "^5.3.3",
-    "react-scripts": "1.1.0"
+    "react-scripts": "1.1.0",
+    "react-uuid": "^1.0.2"
   },
   "scripts": {
     "start": "react-scripts start",

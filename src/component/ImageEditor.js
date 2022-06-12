@@ -7,16 +7,15 @@ import Image from './imageEditor/Image'
 
 const ImageEditor = (setImageData, imageData) => {
   const [allChildren, setAllChildren] = useState([<Rect width={100} key="test" height={100} fill="blue" />,
-  <Circle radius={20} top={200} />,
-  <Image url="https://http.cat/100" scale={0.2} top={100} />])
+  <Circle radius={20} top={200} />])
 
   const addImage = () => {
-    setAllChildren([...allChildren, <Image url="https://http.cat/100" scale={0.2} top={100} />])
+    setAllChildren([...allChildren, <Image url="https://www.osfhealthcare.org/blog/wp-content/uploads/2019/08/apples-OG-765x310.jpg" scale={0.2} top={100} />])
   }
 
   return (
   <div>
-    <DesignCanvas setImageData={setImageData} imageData={imageData}>
+    <DesignCanvas setImageData={setImageData} imageData={imageData} setAllChildren={setAllChildren} allChildren={allChildren}>
       { allChildren }
     </DesignCanvas>
     <button onClick={e => {

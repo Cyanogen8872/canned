@@ -6,12 +6,13 @@ const fabric = window.fabric
 
 const Image = (props) => {
   useEffect(()=>{
-    console.log(props)
     const options = omit(props, ['scale'])
+    console.log(options)
     fabric.Image.fromURL(props.url, img => {
+      console.log(img)
       img.scale(props.scale)
       props.canvas.add(img)
-    }, options)
+    }, { ...options, crossOrigin: 'Anonymous',})
   }, [])
 
   return (null)

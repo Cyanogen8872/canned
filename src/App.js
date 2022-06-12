@@ -11,7 +11,7 @@ const App = () => {
   return (<div>
     <main
       className="col-6 col-sm-8 col-md-10 py-5"
-      style={{ overflowX: "hidden", position: "relative" }}
+      style={{ position: "relative" }}
     >
       <AnimatePresence>
         <Switch location={location} key={location.pathname}>
