@@ -1,6 +1,5 @@
 import React from 'react'
 import { render } from 'react-dom'
-import 'fabric-webpack'
 
 import ParallaxScrolling from './page/ParallaxScrolling'
 import { AnimatePresence, motion } from "framer-motion"
