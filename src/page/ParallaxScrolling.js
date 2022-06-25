@@ -2,6 +2,8 @@ import React, { useEffect, useState, useRef } from 'react'
 import uuid from 'react-uuid'
 import {Box, List, ListItem, ListItemButton, ListItemText, TextField, Button, InputLabel, Typography, Divider} from '@mui/material/'
 import cloneDeep from 'lodash/cloneDeep'
+import template from '../storage/Template'
+import { Draggable, DragDropContext, Droppable  } from 'react-beautiful-dnd';
 
 const ParallaxScrolling = () => {
   const [imageData, setImageData] = useState({})
@@ -15,11 +17,16 @@ const ParallaxScrolling = () => {
 
   const ref = useRef(null)
 
+
   useEffect(()=>{
     if (ref !== null && !beach.init) {
       ref.current.addEventListener('scroll', handleScroll)
       window.onresize = () => {handleResize()}
       setBeach({...beach, init: true})
+
+      const temp = template()
+
+      setImages(temp[1].data)
     }
   }, [])
 
@@ -89,8 +96,10 @@ const ParallaxScrolling = () => {
       return
     }
 
+    const imagePath = URL.createObjectURL(e.target.files[0])
+    console.log(imagePath)
     const newImage = {
-      image:e.target.files[0],
+      image: imagePath,
       name: 'image-0',
       id: uuid(),
       depth: 0,
@@ -146,6 +155,9 @@ const ParallaxScrolling = () => {
     // set the element's new position:
     e.srcElement.style.top = (e.srcElement.offsetTop - img.pos2) + "px";
     e.srcElement.style.left = (e.srcElement.offsetLeft - img.pos1) + "px";
+
+    console.log((e.srcElement.offsetTop - img.pos2) / ref.current.clientWidth * 100)
+    console.log(ref.current.clientWidth)
   }
 
   
@@ -164,45 +176,79 @@ const ParallaxScrolling = () => {
     document.onmousemove = null;
   }
 
+  const onDragEnd = ({destination, source}) => {
+    const imgs = cloneDeep(images)
+
+    const [removed] = imgs.splice(source.index, 1)
+    imgs.splice(destination.index, 0, removed);
+
+    for (const [index, img] of imgs.entries()) {
+      img.style.zIndex = index + 1
+    }
+    setImages(imgs)
+  }
+
   return (
     <div className='editor-background'>
-      {/* <ImageEditor setImageData={setImageData} imageData={imageData}>
-      </ImageEditor> */}
-
-      
       <Box sx={{height: '100px'}}></Box>
 
       {/* Right menu */}
       <Box width="200px" style={{backgroundColor: '#292c31', height: (window.innerHeight - 100) + 'px',position: 'fixed', top: '100px', left:'0px', padding: '8px 12px', zIndex: 1000}}>
-        <List width={'30px'}>
-          <ListItemButton>
-            <Button
-              variant="contained"
-              component="label"
-            >
-              Upload File
-              <input
-                type="file"
-                hidden
-                onChange={(event) => {
-                  addImage(event)
-                }}
-              />
-            </Button>
-          </ListItemButton>
-          {images.map((image, index) => {
-              return (<ListItem disablePadding style={{}}>
-                        <ListItemButton
-                          key={image.id + '-btn'} 
-                          style={{backgroundColor: index === selectedEle ? 'rgba(255,255,255, 0.1)':'', height: '50px'}}
-                          onClick={()=>{setSelectedEle(index)}}>
-                          <ListItemText primary={image.name} />
-                          <img src={URL.createObjectURL(image.image)} style={{maxHeight: '100%', maxWidth: '100%'}}></img>
-                        </ListItemButton>
-                      </ListItem>)})}
-        </List>
+        <Button
+          variant="contained"
+          component="label"
+        >
+          Upload File
+          <input
+            type="file"
+            hidden
+            onChange={(event) => {
+              addImage(event)
+            }}
+          />
+        </Button>
+
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Droppable droppableId={'1'}>
+            {provided => (
+              <div ref={provided.innerRef} {...provided.droppableProps}>
+                {images.map((image, index) => {
+                  return (
+                    <Draggable draggableId={image.name} index={index}  key={image.id + '-key'}>
+                      {(provided, snapshot) => (
+                        <ListItem
+                          disablePadding
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          ref={provided.innerRef}
+                          >
+                          <ListItemButton
+                            onClick={()=>{setSelectedEle(index)}}
+                            style={{
+                              height: '50px',
+                              width: '100%',
+                              backgroundColor: index === selectedEle ? 'rgba(255,255,255, 0.1)':'',
+                              maxHeight: '50px',
+                              }}
+                            >
+                            <ListItemText primary={image.name}/>
+                            <div style={{ width: '50%', height: '100%', textAlign: 'center', top: '50%', }}>
+                              <img src={image.image} style={{maxHeight: '100%', maxWidth: '100%'}}></img>
+                            </div>
+                            
+                          </ListItemButton>
+                        </ListItem>
+                      )}
+                    </Draggable>
+                  )
+                })}
+              </div>
+            )}
+         </Droppable>
+        </DragDropContext>
       </Box>
-      
+
+
       {/* Workbanch */}
       <Box display="grid" gridTemplateColumns="repeat(12, 1fr)" gap={0}>
         <Box gridColumn="span 12" 
@@ -219,7 +265,7 @@ const ParallaxScrolling = () => {
                     {
                       images.map((image, index) => {
                         return <img alt="not fount" 
-                        style={image.style} src={URL.createObjectURL(image.image)} 
+                        style={image.style} src={image.image} 
                         id={image.id}
                         key={image.id}
                         onMouseDown={(e) => {setSelectedEle(index); dragMouseDown(image,e, index)}} />
