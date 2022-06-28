@@ -8,6 +8,7 @@
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
     "@material-ui/core": "^5.0.0-beta.5",
+    "@mui/icons-material": "^5.8.4",
     "@mui/material": "^5.8.3",
     "framer-motion": "^6.3.10",
     "lodash.omit": "4.5.0",
